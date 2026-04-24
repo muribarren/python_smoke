@@ -53,10 +53,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
-
+    
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
@@ -68,13 +65,6 @@ jobs:
           unzip release.zip
           rm release.zip
         
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_5914771930704C508C30D7090175DE0C }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_CF9C1B88CF664DF59C774DE5F1C2D2CB }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_94DB4BCAC58C4A979E8129E49AD2EDF6 }}
-
       - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1
         id: deploy-to-function
@@ -82,4 +72,6 @@ jobs:
           app-name: 'functionapppy'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0961DCB2F47E4A1DAD3B57A22ECEAC37 }}
+          sku: 'flexconsumption'
+        
