@@ -1,0 +1,6 @@
+local.settings.json
+.git*
+.venv
+__pycache__
+*.pyc
+HttpTrigger
